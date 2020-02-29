@@ -33,7 +33,7 @@ void processor(std::string& inputFile, std::string& outputFile, bool& done, uint
 int main()
 {
 
-    unsigned int threadCount = std::thread::hardware_concurrency();
+    unsigned int threadCount = 1;
     std::thread threads[threadCount];
     bool done[threadCount];
     uint64_t processed[threadCount];

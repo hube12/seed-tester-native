@@ -9,10 +9,10 @@ namespace random_math
 
     class LCG {
     public:
-        int64_t multiplier;
-        int64_t addend;
-        int64_t modulo;
-        bool maskable;
+        int64_t multiplier=0x5DEECE66DULL ;
+        int64_t addend=0xBULL;
+        int64_t modulo=1ULL << 48u;
+        bool maskable= true;
 
         LCG(int64_t multiplier, int64_t addend, int64_t modulo, bool maskable = true);
 
