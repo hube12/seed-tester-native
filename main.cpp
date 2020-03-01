@@ -7,13 +7,16 @@
 
 #include "generator.h"
 
-void processor(std::string& inputFile, std::string& outputFile, bool& done, uint64_t& processed, uint64_t& found)
+void processor(int &i, bool& done, uint64_t& processed, uint64_t& found)
 {
+
+	std::string outputFile = "output" + std::to_string(i) + ".txt";
+	std::string inputFile = "seeds" + std::to_string(i) + ".txt";
     std::ofstream output;
     output.open(outputFile);
 
     std::ifstream input;
-    input.open(inputFile);
+    input.open(inputFile,std::fstream::in);
 
     while (input.good()) {
         std::string line;
@@ -33,20 +36,19 @@ void processor(std::string& inputFile, std::string& outputFile, bool& done, uint
 int main()
 {
 
-    unsigned int threadCount = 1;
+    unsigned int threadCount = std::thread::hardware_concurrency();
+    std::cout<<threadCount<<std::endl;
     std::thread threads[threadCount];
     bool done[threadCount];
     uint64_t processed[threadCount];
     uint64_t found[threadCount];
 
     for (int i = 0; i < threadCount; ++i) {
-        std::string fileName = "output" + std::to_string(i) + ".txt";
-        std::string inputName = "seeds" + std::to_string(i) + ".txt";
         done[i] = false;
         processed[i] = 0;
         found[i] = 0;
         std::ifstream input;
-        threads[i] = std::thread(processor, std::ref(inputName), std::ref(fileName), std::ref(done[i]), std::ref(processed[i]), std::ref(found[i]));
+        threads[i] = std::thread(processor, std::ref(i), std::ref(done[i]), std::ref(processed[i]), std::ref(found[i]));
     }
 
     using namespace std::chrono_literals;
