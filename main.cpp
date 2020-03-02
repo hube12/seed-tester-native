@@ -7,7 +7,7 @@
 
 #include "generator.h"
 
-void processor(int &i, bool& done, uint64_t& processed, uint64_t& found)
+void processor(int i, bool& done, uint64_t& processed, uint64_t& found)
 {
 
 	std::string outputFile = "output" + std::to_string(i) + ".txt";
@@ -48,7 +48,7 @@ int main()
         processed[i] = 0;
         found[i] = 0;
         std::ifstream input;
-        threads[i] = std::thread(processor, std::ref(i), std::ref(done[i]), std::ref(processed[i]), std::ref(found[i]));
+        threads[i] = std::thread(processor, i, std::ref(done[i]), std::ref(processed[i]), std::ref(found[i]));
     }
 
     using namespace std::chrono_literals;

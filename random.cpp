@@ -1,7 +1,9 @@
 #include <iostream>
 #include "random.h"
 
-random_math::LCG random_math::JavaRand::lcg = LCG(0x5DEECE66DULL, 0xBULL, 1ULL << 48);
+random_math::LCG::LCG(int64_t multiplier, int64_t addend, int64_t modulo, bool maskable)
+        : multiplier(multiplier), addend(addend), modulo(modulo), maskable(maskable)
+{}
 
 int64_t random_math::LCG::next(int64_t seed)
 {
@@ -36,13 +38,10 @@ random_math::LCG random_math::LCG::combine(int64_t steps)
         add %= this->modulo;
     }
 
-    return {mul, add, this->modulo};
+    return LCG(mul, add, this->modulo);
 }
 
-random_math::LCG::LCG(int64_t multiplier, int64_t addend, int64_t modulo, bool maskable) {
-
-}
-
+random_math::LCG random_math::JavaRand::lcg = LCG(0x5DEECE66DULL, 0xBULL, 1ULL << 48);
 
 random_math::JavaRand::JavaRand(long seed, bool scramble)
         : seed(0)
@@ -64,7 +63,7 @@ void random_math::JavaRand::setSeed(int64_t seed, bool scramble)
 uint32_t random_math::JavaRand::next(int32_t bits)
 {
     this->seed = lcg.next(this->seed);
-    return (uint32_t) (((uint64_t)this->seed) >> (48u - bits));
+    return (uint32_t) (((uint64_t)this->seed) >> (48 - bits));
 }
 
 uint32_t random_math::JavaRand::nextInt(int32_t bound)
@@ -73,8 +72,8 @@ uint32_t random_math::JavaRand::nextInt(int32_t bound)
         throw std::invalid_argument("Bound must be positive");
     }
 
-    if (((uint64_t )bound & (uint64_t )-bound) == bound) {
-        return (int32_t) ((uint64_t )(bound * (int64_t) this->next(31)) >> 31u);
+    if ((bound & -bound) == bound) {
+        return (int32_t) ((bound * (int64_t) this->next(31)) >> 31);
     }
 
     int32_t bits, value;

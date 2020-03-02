@@ -1,7 +1,7 @@
 #include <iostream>
 #include "generator.h"
 
-#define WATERFALL_X 14
+#define WATERFALL_X 10
 #define WATERFALL_Y 76
 #define WATERFALL_Z 10
 #define TREE1_X WATERFALL_X - 5 // Left tree on the image
